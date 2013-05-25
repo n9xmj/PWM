@@ -1,12 +1,14 @@
-#include <util/atomic.h>
+#include "Arduino.h"
 
 //------------------------------------------------------------------------------
 
 void T1PWMInit(void)
 {
-ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+    uint8_t sreg = SREG;
+
     // Power up timer 1
 
+    cli();
     PRR0 &= ~_BV(PRTIM1);    // Clear bit to enable
 
     // Ensure that all Timer 1 interrupts are DISABLED
@@ -64,7 +66,8 @@ ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
 //  PORTB &= ~0xE0;	// "Blow" mode (high = ON): PB5,6,7 low
     PORTB |= 0xE0;  // "Suck" mode (low = ON):  PB5,6,7 high
     DDRB |= 0xE0;   // PB5/OC1A, PB6/OC1B, PB7/OC1C
-} // End ATOMIC_BLOCK
+
+    SREG = sreg;
 }
 
 //-----------------------------------------------------------------------------
@@ -72,9 +75,11 @@ ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
 
 void SetPWM1Period(uint16_t period)
 {
-    ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-        ICR1 = period;
-    }
+    uint8_t sreg = SREG;
+
+    cli();
+    ICR1 = period;
+    SREG = sreg;
 }
 
 //-----------------------------------------------------------------------------
@@ -82,9 +87,11 @@ void SetPWM1Period(uint16_t period)
 
 void SetPWM1A(uint16_t width)
 {
-    ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-        OCR1A = width;
-    }
+    uint8_t sreg = SREG;
+
+    cli();
+    OCR1A = width;
+    SREG = sreg;
 }
     
 //-----------------------------------------------------------------------------
@@ -92,9 +99,11 @@ void SetPWM1A(uint16_t width)
 
 void SetPWM1B(uint16_t width)
 {
-    ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-        OCR1B = width;
-    }
+    uint8_t sreg = SREG;
+
+    cli();
+    OCR1B = width;
+    SREG = sreg;
 }
     
 //-----------------------------------------------------------------------------
@@ -102,7 +111,9 @@ void SetPWM1B(uint16_t width)
 
 void SetPWM1C(uint16_t width)
 {
-    ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-        OCR1C = width;
-    }
+    uint8_t sreg = SREG;
+
+    cli();
+    OCR1C = width;
+    SREG = sreg;
 }
