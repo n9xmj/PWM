@@ -14,5 +14,6 @@ void loop(void)
         SetPWM1A(i);
         SetPWM1B(i);
         SetPWM1C(i);
+        delay(1);
     }
 }
